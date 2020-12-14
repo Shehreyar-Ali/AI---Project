@@ -15,8 +15,8 @@ a = [
 ]
 zoom = 25
 borders = 6
-start = 1,1
-end = 5,19
+start = (1,1)
+ending = tuple((5,19))
 
 def make_step(k):
   for i in range(len(m)):
@@ -37,7 +37,7 @@ def print_m(m):
             print( str(m[i][j]).ljust(2),end=' ')
         print()
 
-def draw_matrix(a,m, the_path = []):
+def draw_matrix(a,m, images,start,ending,the_path = []):
     im = Image.new('RGB', (zoom * len(a[0]), zoom * len(a)), (255, 255, 255))
     draw = ImageDraw.Draw(im)    
     for i in range(len(a)):
@@ -49,7 +49,7 @@ def draw_matrix(a,m, the_path = []):
             if i == start[0] and j == start[1]:
                 color = (0, 255, 0)
                 r = borders
-            if i == end[0] and j == end[1]:
+            if i == ending[0] and j == ending[1]:
                 color = (0, 255, 0)
                 r = borders
             draw.rectangle((j*zoom+r, i*zoom+r, j*zoom+zoom-r-1, i*zoom+zoom-r-1), fill=color)
@@ -78,13 +78,13 @@ i,j = start
 m[i][j] = 1
 
 k = 0
-while m[end[0]][end[1]] == 0:
+while m[ending[0]][ending[1]] == 0:
     k += 1
     make_step(k)
-    draw_matrix(a, m)
+    draw_matrix(a, m,images,start,ending)
 
 
-i, j = end
+(i, j) = ending
 k = m[i][j]
 the_path = [(i,j)]
 while k > 1:
@@ -104,13 +104,13 @@ while k > 1:
     i, j = i, j+1
     the_path.append((i, j))
     k -= 1
-  draw_matrix(a, m, the_path)
+  draw_matrix(a, m,images,start,ending, the_path)
 
 for i in range(10):
     if i % 2 == 0:
-        draw_matrix(a, m, the_path)
+        draw_matrix(a, m,images,start,ending, the_path)
     else:
-        draw_matrix(a, m)
+        draw_matrix(a, m,images,start,ending)
 
 print_m(m)
 print(the_path)
