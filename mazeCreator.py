@@ -20,6 +20,22 @@ def initMaze(n,m):
     maze[0][1] = 0
     maze[-1][-2] = 0
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
     return maze, grid
     
 def showMaze():
