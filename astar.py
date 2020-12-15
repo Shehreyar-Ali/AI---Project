@@ -11,6 +11,26 @@ grid = [[0, 0, 0, 0, 0, 1],
         [0, 1, 0, 0, 1, 0],
         [0, 1, 0, 0, 0, 0]]
 
+grid1 = [[0, 0, 0, 0, 0, 1,0],
+        [1, 1, 0, 0, 0, 1,0],
+        [0, 0, 0, 1, 0, 0,0],
+        [0, 1, 1, 0, 0, 1,0],
+        [0, 1, 0, 0, 1, 0,0],
+        [0, 1, 0, 0, 0, 0,0]]
+a = [
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1],
+    [1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+    [1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+]
+start = (1,1)
+ending = tuple((5,19))
 class Cell(object):
     def __init__(self, x, y, reachable):
         """
@@ -39,9 +59,10 @@ class AStar(object):
         heapq.heapify(self.opened)
         self.closed = set()
         self.cells = []
-        self.grid_height = len(grid[1])
-        self.grid_width = len(grid)
         self.grid=maze
+        self.grid_height = len(maze[1])
+        self.grid_width = len(maze)
+        
         
 
 
@@ -86,6 +107,7 @@ class AStar(object):
         
         m[self.end.x][self.end.y]= 2
         m[self.start.x][self.start.y]=len(pathlist)+3
+        
         for i in range(len(pathlist)):
             m[pathlist[i][0]][pathlist[i][1]]=i+3
         pathlist=pathlist[::-1]
@@ -164,7 +186,7 @@ class AStar(object):
         walls=[]
         for i in range(self.grid_width):
 	        for j in range(self.grid_height):
-		        if grid[i][j]==1:
+		        if self.grid[i][j]==1:
 			        walls.append((i,j))
         return walls
 
@@ -178,8 +200,8 @@ class AStar(object):
         """
         return 10 * (abs(cell.x - self.end.x) + abs(cell.y - self.end.y))
 
-ass= AStar(grid)
-ass.init_grid([5,5],[0,0])
+ass= AStar(a)
+ass.init_grid(start,ending)
 ass.process()
 
 images[0].save('maze1.jpg')
