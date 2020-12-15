@@ -1,36 +1,21 @@
 import heapq
-from PIL import Image, ImageDraw
-from bfs import draw_matrix
+import visualisation as vs
+from bfs import a
 import copy
-
+import mazeCreator as mc
 images=[]
-grid = [[0, 0, 0, 0, 0, 1],
-        [1, 1, 0, 0, 0, 1],
-        [0, 0, 0, 1, 0, 0],
-        [0, 1, 1, 0, 0, 1],
-        [0, 1, 0, 0, 1, 0],
-        [0, 1, 0, 0, 0, 0]]
 
-grid1 = [[0, 0, 0, 0, 0, 1,0],
-        [1, 1, 0, 0, 0, 1,0],
-        [0, 0, 0, 1, 0, 0,0],
-        [0, 1, 1, 0, 0, 1,0],
-        [0, 1, 0, 0, 1, 0,0],
-        [0, 1, 0, 0, 0, 0,0]]
-a = [
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-    [1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-    [1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-    [1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1],
-    [1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
-    [1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1],
-    [1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-    [1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-]
-start = (1,1)
-ending = tuple((5,19))
+
+
+
+#a = mc.maze
+
+
+
+start = (0,1)
+ending = mc.endPoint()
+
+
 class Cell(object):
     def __init__(self, x, y, reachable):
         """
@@ -48,7 +33,7 @@ class Cell(object):
         self.f = 0
 
     def __lt__(self, other):
-        return self.h < other.h
+        return self.f < other.f
 
     
 
@@ -63,9 +48,6 @@ class AStar(object):
         self.grid_height = len(maze[1])
         self.grid_width = len(maze)
         
-        
-
-
     def get_cell(self, x, y):
         """
         Returns a cell from the cells list
@@ -97,30 +79,31 @@ class AStar(object):
 
     def display_path(self):
         m=[[0]*self.grid_height for _ in range(self.grid_width)]
+        #print("here")
+
         print(self.grid)
         pathlist=[]
         cell = self.end
         while cell.parent is not self.start:
             cell = cell.parent
-            print ("path: cell:" + str(cell.x) +","+ str(cell.y))
             pathlist.append((cell.x,cell.y))
         
-        m[self.end.x][self.end.y]= len(pathlist)+2
-        m[self.start.x][self.start.y]= 1
-        w=2
+        m[self.end.x][self.end.y] = len(pathlist)+2
+        m[self.start.x][self.start.y] = 1
+        w = 2
+
         for i in reversed(range(len(pathlist))):
-            m[pathlist[i][0]][pathlist[i][1]]=w
-            w+=1
-        pathlist=pathlist[::-1]
+            m[pathlist[i][0]][pathlist[i][1]] = w
+            w += 1
+
+        pathlist = pathlist[::-1]
+
         pathlist.insert(0,(self.start.x,self.start.y))
         pathlist.insert(-1,(self.end.x,self.end.y))
         print(pathlist)
-
-    
-
         print(m)
-        print(self.grid)
-        draw_matrix(self.grid, m, images,(self.start.x,self.start.y),(self.end.x,self.end.y), pathlist)
+        #print(self.grid)
+        vs.draw_matrix(self.grid, m, images,(self.start.x,self.start.y),(self.end.x,self.end.y), pathlist)
     
     
     def update_cell(self, adj, cell):
@@ -135,18 +118,18 @@ class AStar(object):
         adj.parent = cell
         adj.f = adj.h + adj.g
 
-    def process(self):
+    def process(self,timing = False):
         # add starting cell to open heap queue
         heapq.heappush(self.opened, (self.start.f, self.start))
         while len(self.opened):
             # pop cell from heap queue
-            f, cell = heapq.heappop(self.opened)
+            cell = heapq.heappop(self.opened)[1]
             # add cell to closed list so we don't process it twice
             self.closed.add(cell)
             # if ending cell, display found path
-            if cell is self.end:
+            if cell is self.end and timing != True:
                 self.display_path()
-                break
+                
             # get adjacent cells for cell
             adj_cells = self.get_adjacent_cells(cell)
             for adj_cell in adj_cells:
@@ -161,7 +144,7 @@ class AStar(object):
                         self.update_cell(adj_cell, cell)
                         # add adj cell to open list
                         heapq.heappush(self.opened, (adj_cell.f, adj_cell))
-        if images==[]:
+        if images==[] and timing == False:
             print("no path")
     
     def init_grid(self,start, end):
@@ -195,8 +178,12 @@ class AStar(object):
         """
         return 10 * (abs(cell.x - self.end.x) + abs(cell.y - self.end.y))
 
+
 ass= AStar(a)
 ass.init_grid(start,ending)
-ass.process()
+timing=False
+ass.process(timing)
 
-images[0].save('maze1.jpg')
+
+if not timing:
+    images[0].save('maze1.jpg')
