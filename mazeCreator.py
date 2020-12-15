@@ -1,4 +1,3 @@
-
 import random
 
 maze = []
@@ -11,6 +10,11 @@ colLimit = None
 
 def initMaze(n,m):
 
+
+    rowLimit = n*2
+    colLimit = m*2
+
+
     rowLimit = n*2
     colLimit = m*2
 
@@ -19,15 +23,17 @@ def initMaze(n,m):
 
     for i in range(m):
         maze.append([1]*(n-1))
+
     
     
+
     for i in range(1,n):
         for j in range(1,m-1):
             grid.append((i,j))
-    # print(grid)
 
     maze[0][1] = 0
     maze[-1][-2] = 0
+
     
 
     # for i in grid:
@@ -39,17 +45,12 @@ def showMaze():
     for i in maze:
         print(i)
 
-
 def putZero(row,col):
     # print("zero")
     maze[row][col] = 0
 
 
-
-
-def createMaze(row, col):
-    
-
+def createMaze(row, col, rowLimit, colLimit):
     stack.append((row, col))
     visited.append((row, col))
 
@@ -124,11 +125,34 @@ def createMaze(row, col):
             row, col = stack.pop()                                    # if no cells are available pop one from the stack
 
 
+def endPoint():
+    result = []
+    for i in range(len(maze)):
+        if (maze[i].count(0) == 1 and i >0):
+            result.append(i)
+            result.append(maze[i].index(0))
+    return result[0], result[1]
 
-maze, grid, rowLimit, colLimit = initMaze(20,20)
-createMaze(0,1)
-showMaze()
-maze.pop(0)
-print(len(maze))
+
+
+
+def main(x, y, timing):
+    maze, grid, rowLimit, colLimit = initMaze(x,y)
+    createMaze(0,1,rowLimit,colLimit)
+    z = maze.pop(0)
+
+    if not timing:
+        showMaze()
+
+
+# maze, grid, rowLimit, colLimit = initMaze(20,20)
+# createMaze(0,1)
+# showMaze()
+# maze.pop(0)
+# print(len(maze))
+# =======
+
+# # print(len(maze))
+# >>>>>>> worked-ish
 
 
