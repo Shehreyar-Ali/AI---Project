@@ -1,4 +1,3 @@
-
 import random
 
 maze = []
@@ -10,6 +9,15 @@ rowLimit = None
 colLimit = None
 
 def initMaze(n,m):
+<<<<<<< HEAD
+=======
+
+
+    rowLimit = n*2
+    colLimit = m*2
+
+
+>>>>>>> main
     rowLimit = n*2
     colLimit = m*2
     n*=2
@@ -18,12 +26,26 @@ def initMaze(n,m):
     for i in range(m):
         maze.append([1]*(n-1))
 
+<<<<<<< HEAD
+=======
+    
+    
+
+>>>>>>> main
     for i in range(1,n):
         for j in range(1,m-1):
             grid.append((i,j))
 
     maze[0][1] = 0
     maze[-1][-2] = 0
+<<<<<<< HEAD
+=======
+
+    
+
+    # for i in grid:
+    #     print(i)
+>>>>>>> main
 
     return maze, grid, rowLimit, colLimit
     
@@ -36,7 +58,11 @@ def putZero(row,col):
     maze[row][col] = 0
 
 
+<<<<<<< HEAD
 def createMaze(row, col):
+=======
+def createMaze(row, col, rowLimit, colLimit):
+>>>>>>> main
     stack.append((row, col))
     visited.append((row, col))
 
@@ -118,6 +144,7 @@ def endPoint():
             result.append(i)
             result.append(maze[i].index(0))
     return result[0], result[1]
+<<<<<<< HEAD
 
 maze, grid, rowLimit, colLimit = initMaze(10,10)
 createMaze(0,1)
@@ -125,5 +152,29 @@ createMaze(0,1)
 z = maze.pop(0)
 showMaze()
 # print(len(maze))
+=======
+
+
+
+
+def main(x, y, timing):
+    maze, grid, rowLimit, colLimit = initMaze(x,y)
+    createMaze(0,1,rowLimit,colLimit)
+    z = maze.pop(0)
+
+    if not timing:
+        showMaze()
+
+
+# maze, grid, rowLimit, colLimit = initMaze(20,20)
+# createMaze(0,1)
+# showMaze()
+# maze.pop(0)
+# print(len(maze))
+# =======
+
+# # print(len(maze))
+# >>>>>>> worked-ish
+>>>>>>> main
 
 
