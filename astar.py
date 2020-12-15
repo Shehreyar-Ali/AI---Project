@@ -1,8 +1,8 @@
 import heapq
 import visualisation as vs
-from bfs import a
-import copy
-import mazeCreator as mc
+# from bfs import a
+# import copy
+# import mazeCreator as mc
 images=[]
 
 
@@ -12,8 +12,8 @@ images=[]
 
 
 
-start = (0,1)
-ending = mc.endPoint()
+# start = (0,1)
+# ending = mc.endPoint()
 
 
 class Cell(object):
@@ -179,11 +179,17 @@ class AStar(object):
         return 10 * (abs(cell.x - self.end.x) + abs(cell.y - self.end.y))
 
 
-ass= AStar(a)
-ass.init_grid(start,ending)
-timing=False
-ass.process(timing)
 
 
-if not timing:
-    images[0].save('maze1.jpg')
+
+
+def main(a, start, ending, timing):
+    ass= AStar(a)
+    ass.init_grid(start,ending)
+    timing=False
+    ass.process(timing)
+
+
+    if not timing:
+        images[0].save('maze1.jpg')
+

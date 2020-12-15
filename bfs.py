@@ -1,8 +1,9 @@
 from PIL import Image, ImageDraw
 import visualisation as vs
+
+
+
 images = []
-import copy
-import mazeCreator as mc
 
 # a = [
 #     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -17,13 +18,13 @@ import mazeCreator as mc
 #     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
 # ]
 
-a = mc.maze
-zoom = 20
-borders = 6
-start = (0,1)
-ending = mc.endPoint()
+# a = mc.maze
+# zoom = 20
+# borders = 6
+# start = (0,1)
+# ending = mc.endPoint()
 
-def make_step(k,m):
+def make_step(a,k,m):
   for i in range(len(m)):
     for j in range(len(m[i])):
       if m[i][j] == k:
@@ -37,36 +38,6 @@ def make_step(k,m):
            m[i][j+1] = k + 1
 
 
-def draw_matrix(a,m, images,start,ending,the_path = []):
-    im = Image.new('RGB', (zoom * len(a[0]), zoom * len(a)), (255, 255, 255))
-    draw = ImageDraw.Draw(im)    
-    for i in range(len(a)):
-        for j in range(len(a[i])):
-            color = (255, 255, 255)
-            r = 0
-            if a[i][j] == 1:
-                color = (0, 0, 0)
-            if i == start[0] and j == start[1]:
-                color = (0, 255, 0)
-                r = borders
-            if i == ending[0] and j == ending[1]:
-                color = (0, 255, 0)
-                r = borders
-            draw.rectangle((j*zoom+r, i*zoom+r, j*zoom+zoom-r-1, i*zoom+zoom-r-1), fill=color)
-            if m[i][j] > 0:
-                r = borders
-                draw.ellipse((j * zoom + r, i * zoom + r, j * zoom + zoom - r - 1, i * zoom + zoom - r - 1),
-                               fill=(255,0,0))
-
-
-    for u in range(len(the_path)-1):
-        y = the_path[u][0]*zoom + int(zoom/2)
-        x = the_path[u][1]*zoom + int(zoom/2)
-        y1 = the_path[u+1][0]*zoom + int(zoom/2)
-        x1 = the_path[u+1][1]*zoom + int(zoom/2)
-        draw.line((x,y,x1,y1), fill=(255, 0,0), width=5)
-    draw.rectangle((0, 0, zoom * len(a[0]), zoom * len(a)), outline=(0,255,0), width=2)
-    images.append(im)
 
 def bfs_process(a,start,ending):
     
@@ -81,7 +52,7 @@ def bfs_process(a,start,ending):
     k = 0
     while m[ending[0]][ending[1]] == 0:
         k += 1
-        make_step(k,m)
+        make_step(a,k,m)
         #draw_matrix(a, m,images,start,ending)
 
 
@@ -108,12 +79,10 @@ def bfs_process(a,start,ending):
         
     return (m,the_path)
 
-m,the_path= bfs_process(a,start,ending)
 
-draw_matrix(a, m,images,start,ending, the_path)
+def main(a, start, ending, timing):
+    m, the_path = bfs_process(a,start,ending)
+    if not timing:
+        vs.draw_matrix(a,m,images,start,ending,the_path)
+        images[0].save('maze.jpg')
 
-
-images[0].save('maze.jpg')
-#,
- #   save_all=True, append_images=images[1:],
-  #             optimize=False, duration=1, loop=0) """

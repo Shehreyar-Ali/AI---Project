@@ -1,6 +1,14 @@
 from PIL import Image, ImageDraw
-zoom = 25
+# import mazeCreator as mc
+
+# a = mc.maze
+# start = 0,1
+# ending = mc.endPoint()
+zoom = 20
 borders = 6
+
+
+
 
 
 def draw_matrix(a,m, images,start,ending,the_path = []):
@@ -33,3 +41,7 @@ def draw_matrix(a,m, images,start,ending,the_path = []):
         draw.line((x,y,x1,y1), fill=(255, 0,0), width=5)
     draw.rectangle((0, 0, zoom * len(a[0]), zoom * len(a)), outline=(0,255,0), width=2)
     images.append(im)
+
+
+
+    

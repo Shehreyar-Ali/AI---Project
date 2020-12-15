@@ -35,7 +35,7 @@ def putZero(row,col):
     maze[row][col] = 0
 
 
-def createMaze(row, col):
+def createMaze(row, col, rowLimit, colLimit):
     stack.append((row, col))
     visited.append((row, col))
 
@@ -118,11 +118,18 @@ def endPoint():
             result.append(maze[i].index(0))
     return result[0], result[1]
 
-maze, grid, rowLimit, colLimit = initMaze(20,20)
-createMaze(0,1)
 
-z = maze.pop(0)
-showMaze()
+
+
+def main(x, y, timing):
+    maze, grid, rowLimit, colLimit = initMaze(x,y)
+    createMaze(0,1,rowLimit,colLimit)
+    z = maze.pop(0)
+
+    if not timing:
+        showMaze()
+
+
 # print(len(maze))
 
 
