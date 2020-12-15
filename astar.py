@@ -96,7 +96,7 @@ class AStar(object):
         return cells
 
     def display_path(self):
-        m= copy.deepcopy(self.grid)
+        m=[[0]*self.grid_height for _ in range(self.grid_width)]
         print(self.grid)
         pathlist=[]
         cell = self.end
@@ -105,24 +105,18 @@ class AStar(object):
             print ("path: cell:" + str(cell.x) +","+ str(cell.y))
             pathlist.append((cell.x,cell.y))
         
-        m[self.end.x][self.end.y]= 2
-        m[self.start.x][self.start.y]=len(pathlist)+3
-        
-        for i in range(len(pathlist)):
-            m[pathlist[i][0]][pathlist[i][1]]=i+3
+        m[self.end.x][self.end.y]= len(pathlist)+2
+        m[self.start.x][self.start.y]= 1
+        w=2
+        for i in reversed(range(len(pathlist))):
+            m[pathlist[i][0]][pathlist[i][1]]=w
+            w+=1
         pathlist=pathlist[::-1]
         pathlist.insert(0,(self.start.x,self.start.y))
         pathlist.insert(-1,(self.end.x,self.end.y))
         print(pathlist)
 
-        for i in range(self.grid_width):
-            for j in range(self.grid_height):
-                # if m[i][j]==0:
-                #     m[i][j]="e"
-                if m[i][j]==1:
-                    m[i][j]=0
-                elif type(m[i][j])==int:
-                    m[i][j]-=1
+    
 
         print(m)
         print(self.grid)
@@ -167,7 +161,8 @@ class AStar(object):
                         self.update_cell(adj_cell, cell)
                         # add adj cell to open list
                         heapq.heappush(self.opened, (adj_cell.f, adj_cell))
-        print("no path")
+        if images==[]:
+            print("no path")
     
     def init_grid(self,start, end):
         walls = self.init_walls()

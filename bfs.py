@@ -1,5 +1,6 @@
 from PIL import Image, ImageDraw
 images = []
+import copy
 
 a = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -112,7 +113,8 @@ for i in range(10):
     else:
         draw_matrix(a, m,images,start,ending)
 
-print_m(m)
+print(m)
+
 print(the_path)
 
 images[0].save('maze.gif',
