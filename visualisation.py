@@ -4,7 +4,7 @@ from PIL import Image, ImageDraw
 # a = mc.maze
 # start = 0,1
 # ending = mc.endPoint()
-zoom = 20
+zoom = 25
 borders = 6
 
 

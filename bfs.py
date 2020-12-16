@@ -39,50 +39,61 @@ def make_step(a,k,m):
 
 
 
-def bfs_process(a,start,ending):
+def bfs_process(a,start,ending,timing):
+  m = []
+  for i in range(len(a)):
+    m.append([])
+    for j in range(len(a[i])):
+      m[-1].append(0)
+  i,j = start
+  m[i][j] = 1
+
+  k = 0
+  while m[ending[0]][ending[1]] == 0:
+    k += 1
+    make_step(a,k,m)
+    if not timing:
+      vs.draw_matrix(a, m,images,start,ending)
+
+
+  (i, j) = ending
+  k = m[i][j]
+  the_path = [(i,j)]
+  while k > 1:
+    if i > 0 and m[i - 1][j] == k-1:
+      i, j = i-1, j
+      the_path.append((i, j))
+      k-=1
+    elif j > 0 and m[i][j - 1] == k-1:
+      i, j = i, j-1
+      the_path.append((i, j))
+      k-=1
+    elif i < len(m) - 1 and m[i + 1][j] == k-1:
+      i, j = i+1, j
+      the_path.append((i, j))
+      k-=1
+    elif j < len(m[i]) - 1 and m[i][j + 1] == k-1:
+      i, j = i, j+1
+      the_path.append((i, j))
+      k -= 1
+    if not timing:
+      vs.draw_matrix(a,m,images,start,ending, the_path)
     
-    m = []
-    for i in range(len(a)):
-        m.append([])
-        for j in range(len(a[i])):
-            m[-1].append(0)
-    i,j = start
-    m[i][j] = 1
-
-    k = 0
-    while m[ending[0]][ending[1]] == 0:
-        k += 1
-        make_step(a,k,m)
-        #draw_matrix(a, m,images,start,ending)
-
-
-    (i, j) = ending
-    k = m[i][j]
-    the_path = [(i,j)]
-    while k > 1:
-        if i > 0 and m[i - 1][j] == k-1:
-            i, j = i-1, j
-            the_path.append((i, j))
-            k-=1
-        elif j > 0 and m[i][j - 1] == k-1:
-            i, j = i, j-1
-            the_path.append((i, j))
-            k-=1
-        elif i < len(m) - 1 and m[i + 1][j] == k-1:
-            i, j = i+1, j
-            the_path.append((i, j))
-            k-=1
-        elif j < len(m[i]) - 1 and m[i][j + 1] == k-1:
-            i, j = i, j+1
-            the_path.append((i, j))
-            k -= 1
-        
-    return (m,the_path)
+  for i in range(10):
+    if i % 2 == 0:
+        vs.draw_matrix(a,m,images,start,ending, the_path)
+    else:
+        vs.draw_matrix(a,m,images,start,ending)
+    
+  return (m,the_path)
 
 
 def main(a, start, ending, timing):
-    m, the_path = bfs_process(a,start,ending)
+    m, the_path = bfs_process(a,start,ending,timing)
     if not timing:
-        vs.draw_matrix(a,m,images,start,ending,the_path)
-        images[0].save('maze.jpg')
+      print(m)
+      print(the_path)
+      images[0].save('maze.gif',
+               save_all=True, append_images=images[1:],
+               optimize=False, duration=1, loop=0)
 

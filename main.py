@@ -3,14 +3,14 @@ import bfs
 
 import mazeCreator as mc
 
-mc.main(20,20,True)
+mc.main(10,10,True)
 a = mc.maze
 start = 0,1
 ending = mc.endPoint()
 
-ast.main(a,start,ending,True)
+ast.main(a,start,ending,False)
 
-bfs.main(a,start,ending,True)
+bfs.main(a,start,ending,False)
 
 
 """
