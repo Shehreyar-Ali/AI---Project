@@ -1,14 +1,7 @@
 from PIL import Image, ImageDraw
-# import mazeCreator as mc
 
-# a = mc.maze
-# start = 0,1
-# ending = mc.endPoint()
-zoom = 25
+zoom = 20
 borders = 6
-
-
-
 
 
 def draw_matrix(a,m, images,start,ending,the_path = []):
