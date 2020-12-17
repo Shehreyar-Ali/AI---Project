@@ -3,6 +3,9 @@ import bfs
 import time
 import mazeCreator as mc
 import matplotlib.pyplot as plt
+# import breezypythongui as bpg
+import tkinter as tk
+from tkinter import ttk
 plt.style.use('seaborn-whitegrid')
 
 # a = mc.main(20,20,True,[],[])
@@ -12,6 +15,8 @@ plt.style.use('seaborn-whitegrid')
 # ast.main(a,start,ending,False)
 
 # bfs.main(a,start,ending,False)
+
+
 
 
 
@@ -52,23 +57,67 @@ def mazeTesting(itr, x, y, showOutput, showMaze):
 
 
 
-def main():
+def main(itr,dimensions,showMazeGifs = False):
 
-    astTime, bfsTime = mazeTesting(1,10,10,False,True)
+    print(showMazeGifs)
 
-    # plt.plot([i for i in range(len(astTime))], astTime, label = "A star")
-    # plt.plot([i for i in range(len(bfsTime))], bfsTime, label = "BFS")
+    if showMazeGifs:
+        mazeTesting(1,dimensions,dimensions,False,True)
 
-    # plt.xlabel("Iterations")
-    # plt.ylabel("Time taken/s")
-    # plt.title("A star vs BFS maze solver")
-    # plt.legend()
+    else:
+        astTime, bfsTime = mazeTesting(itr,dimensions,dimensions,False,False)
+
+        plt.clf()
+        
+        plt.plot([i for i in range(len(astTime))], astTime, label = "A star")
+        plt.plot([i for i in range(len(bfsTime))], bfsTime, label = "BFS")
+
+        plt.xlabel("Iterations")
+        plt.ylabel("Time taken/s")
+        plt.title("A star vs BFS maze solver")
+        plt.legend()
+        
+        plt.show()
     
-    # plt.show()
 
 
 
-main()
+def interface():
+
+    root = tk.Tk()
+    root.geometry("800x200")
+
+    itr_label = tk.Label(text = "Please input number of iterations")
+    itr_label.pack(side = tk.LEFT)
+
+    itr_entry = tk.Entry(root, width = 15, bd = 5)
+    itr_entry.pack(side = tk.LEFT)
+    
+    dim_label = tk.Label(text = "Please input a number for the n x n maze to be made")
+    dim_label.pack(side = tk.LEFT)
+
+    dim_entry = tk.Entry(root, width = 15, bd = 5)
+    dim_entry.pack(side = tk.LEFT)
+
+    status = tk.IntVar()
+
+    showMaze_checkbox = tk.Checkbutton(root, text = "Create Gif?", variable = status )
+    showMaze_checkbox.pack(side = tk.RIGHT)
+
+    b1 = ttk.Button(root, text = "Run")
+    
+    b1.config(command = lambda: main( int(itr_entry.get()), int(dim_entry.get()),  status.get() ))
+    b1.pack(side = tk.BOTTOM)
+
+    
+
+    root.mainloop()
+
+interface()
+
+# for i in range(3):
+#     main(5,10,True)
+#     time.sleep(3)
 
 
 
