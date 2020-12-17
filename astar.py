@@ -1,7 +1,7 @@
 import heapq
 import visualisation as vs
 
-gif_list=[]
+
 
 class Cell(object):
     def __init__(self, x, y, reachable):
@@ -22,8 +22,9 @@ class Cell(object):
 
     
 class AStar(object):
-    def __init__(self,maze):
+    def __init__(self,maze,gif):
         self.cell_list = []
+        self.gif_list=gif
         heapq.heapify(self.cell_list)
         self.visited = set()
         self.cells = []
@@ -77,7 +78,7 @@ class AStar(object):
         
         for i in range(len(pathlist)+1):
             forvis= pathlist[:i]
-            vs.draw_matrix(self.grid, self.maze_steps, gif_list,(self.start.x,self.start.y),(self.end.x,self.end.y), forvis)
+            vs.draw_matrix(self.grid, self.maze_steps, self.gif_list,(self.start.x,self.start.y),(self.end.x,self.end.y), forvis)
     
         
         print(pathlist)
@@ -85,10 +86,10 @@ class AStar(object):
         
         for i in range(10):
             if i%2 == 0:
-                vs.draw_matrix(self.grid, self.maze_steps, gif_list,
+                vs.draw_matrix(self.grid, self.maze_steps, self.gif_list,
                 (self.start.x,self.start.y),(self.end.x,self.end.y))
             else:
-                vs.draw_matrix(self.grid, self.maze_steps, gif_list,
+                vs.draw_matrix(self.grid, self.maze_steps, self.gif_list,
                 (self.start.x,self.start.y),(self.end.x,self.end.y), forvis)
      
     
@@ -117,7 +118,7 @@ class AStar(object):
             
             if timing != True:
                 self.maze_steps[cell.x][cell.y]=k
-                vs.draw_matrix(self.grid, self.maze_steps, gif_list,(self.start.x,self.start.y),(self.end.x,self.end.y))
+                vs.draw_matrix(self.grid, self.maze_steps, self.gif_list,(self.start.x,self.start.y),(self.end.x,self.end.y))
             k+=1
             
             # if ending cell, display found path
@@ -130,18 +131,18 @@ class AStar(object):
             
             for adj_cell in adj_cells:
                 if adj_cell.reachable and adj_cell not in self.visited:
-                    if (adj_cell.total, adj_cell) in self.cell_list:
+                    #if (adj_cell.total, adj_cell) in self.cell_list:
                         # if adj cell in cell_list, check if current path is
                         # better than the one previously found for this adj
                         # cell.
-                        if adj_cell.cost_walk > cell.cost_walk + 10:
-                            self.update_cell(adj_cell, cell)
-                    else:
-                        self.update_cell(adj_cell, cell)
+                        #if adj_cell.cost_walk > cell.cost_walk + 10:
+                        #    self.update_cell(adj_cell, cell)
+                    #else:
+                    self.update_cell(adj_cell, cell)
                         # add adj cell to cell_list
-                        heapq.heappush(self.cell_list, (adj_cell.total, adj_cell))
+                    heapq.heappush(self.cell_list, (adj_cell.total, adj_cell))
         
-        if gif_list==[] and timing == False:
+        if self.gif_list==[] and timing == False:
             print("no path")
     
     def init_cells(self,start, end):
@@ -179,7 +180,8 @@ class AStar(object):
 
 
 def main(maze, start, ending, timing):
-    ass= AStar(maze)
+    gif_list=[]
+    ass= AStar(maze,gif_list)
     ass.init_cells(start,ending)
     ass.process(timing)
 
