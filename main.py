@@ -3,20 +3,9 @@ import bfs
 import time
 import mazeCreator as mc
 import matplotlib.pyplot as plt
-# import breezypythongui as bpg
 import tkinter as tk
 from tkinter import ttk
 plt.style.use('seaborn-whitegrid')
-
-# a = mc.main(20,20,True,[],[])
-# start = 0,1
-# ending = mc.endPoint(a)
-
-# ast.main(a,start,ending,False)
-
-# bfs.main(a,start,ending,False)
-
-
 
 
 
@@ -114,26 +103,6 @@ def interface():
     root.mainloop()
 
 interface()
-
-# for i in range(3):
-#     main(5,10,True)
-#     time.sleep(3)
-
-
-
-
-
-# mc.main(20,20,True)
-# a = mc.maze
-# start = 0,1
-# ending = mc.endPoint()
-
-# ast.main(a,start,ending,True)
-
-# bfs.main(a,start,ending,True)
-
-
-
 
 
 
