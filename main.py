@@ -138,30 +138,16 @@ interface()
 
 
 """
-
     Create Maze and all its req stuff
-
     ------------------------------------------------
-
         [start timer1]
-
     Run ast for that maze - {doesnt draw out image}
-
         [end timer1]
-
     ------------------------------------------------
-
         [start timer2]
-
     Run bfs for that maze - {doesnt draw out image}
-
         [end timer2]
-
     ------------------------------------------------
-
-
     ast_timeTakenList.append(time1)
     bfs_timeTakenList.append(time2)
-
-
 """

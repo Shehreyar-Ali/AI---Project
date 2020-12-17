@@ -1,102 +1,89 @@
 from PIL import Image, ImageDraw
 import visualisation as vs
 
+gif_list = []
 
+def make_step(maze,step_num,step_maze):
+  for i in range(len(step_maze)):
+    for j in range(len(step_maze[i])):
+      make_step_helper(i,j,maze,step_num,step_maze)
+      
+def make_step_helper(i,j,maze,step_num,step_maze):
 
-images = []
+  if step_maze[i][j] == step_num:
 
-# a = [
-#     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-#     [1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-#     [1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-#     [1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-#     [1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1],
-#     [1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
-#     [1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1],
-#     [1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-#     [1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-#     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-# ]
+    if i>0 and step_maze[i-1][j] == 0 and maze[i-1][j] == 0:
+      step_maze[i-1][j] = step_num + 1
+    
+    if j>0 and step_maze[i][j-1] == 0 and maze[i][j-1] == 0:
+      step_maze[i][j-1] = step_num + 1
+    
+    if i<len(step_maze)-1 and step_maze[i+1][j] == 0 and maze[i+1][j] == 0:
+      step_maze[i+1][j] = step_num + 1
+    
+    if j<len(step_maze[i])-1 and step_maze[i][j+1] == 0 and maze[i][j+1] == 0:
+        step_maze[i][j+1] = step_num + 1
 
-# a = mc.maze
-# zoom = 20
-# borders = 6
-# start = (0,1)
-# ending = mc.endPoint()
-
-def make_step(a,k,m):
-  for i in range(len(m)):
-    for j in range(len(m[i])):
-      if m[i][j] == k:
-        if i>0 and m[i-1][j] == 0 and a[i-1][j] == 0:
-          m[i-1][j] = k + 1
-        if j>0 and m[i][j-1] == 0 and a[i][j-1] == 0:
-          m[i][j-1] = k + 1
-        if i<len(m)-1 and m[i+1][j] == 0 and a[i+1][j] == 0:
-          m[i+1][j] = k + 1
-        if j<len(m[i])-1 and m[i][j+1] == 0 and a[i][j+1] == 0:
-           m[i][j+1] = k + 1
-
-
-
-def bfs_process(a,start,ending,timing):
-  m = []
-  for i in range(len(a)):
-    m.append([])
-    for j in range(len(a[i])):
-      m[-1].append(0)
+def fill_step_maze(maze,start,ending,timing,step_maze):
   i,j = start
-  m[i][j] = 1
+  step_maze[i][j] = 1
+  step_num = 0
 
-  k = 0
-  while m[ending[0]][ending[1]] == 0:
-    k += 1
-    make_step(a,k,m)
+  while step_maze[ending[0]][ending[1]] == 0:
+    step_num += 1
+    make_step(maze,step_num,step_maze)
     if not timing:
-      vs.draw_matrix(a, m,images,start,ending)
+      vs.draw_matrix(maze, step_maze,gif_list,start,ending)
 
+
+
+def bfs_process(maze,start,ending,timing):
+  
+  step_maze = [[0 for _ in range (len(maze[0]))] for _ in range (len(maze))]
+
+  fill_step_maze(maze,start,ending,timing,step_maze)
 
   (i, j) = ending
-  k = m[i][j]
+  step_num = step_maze[i][j]
   the_path = [(i,j)]
-  while k > 1:
-    if i > 0 and m[i - 1][j] == k-1:
+  
+  while step_num > 1:
+    if i > 0 and step_maze[i - 1][j] == step_num-1:
       i, j = i-1, j
       the_path.append((i, j))
-      k-=1
-    elif j > 0 and m[i][j - 1] == k-1:
+      step_num-=1
+    elif j > 0 and step_maze[i][j - 1] == step_num-1:
       i, j = i, j-1
       the_path.append((i, j))
-      k-=1
-    elif i < len(m) - 1 and m[i + 1][j] == k-1:
+      step_num-=1
+    elif i < len(step_maze) - 1 and step_maze[i + 1][j] == step_num-1:
       i, j = i+1, j
       the_path.append((i, j))
-      k-=1
-    elif j < len(m[i]) - 1 and m[i][j + 1] == k-1:
+      step_num-=1
+    elif j < len(step_maze[i]) - 1 and step_maze[i][j + 1] == step_num-1:
       i, j = i, j+1
       the_path.append((i, j))
-      k -= 1
+      step_num -= 1
     if not timing:
-      vs.draw_matrix(a,m,images,start,ending, the_path)
-    
-  for i in range(10):
-    if i % 2 == 0:
-        vs.draw_matrix(a,m,images,start,ending, the_path)
-    else:
-        vs.draw_matrix(a,m,images,start,ending)
-    
-  return (m,the_path)
+      vs.draw_matrix(maze,step_maze,gif_list,start,ending, the_path)
+
+  if not timing:
+    for i in range(10):
+      if i % 2 == 0:
+          vs.draw_matrix(maze,step_maze,gif_list,start,ending, the_path)
+      else:
+          vs.draw_matrix(maze,step_maze,gif_list,start,ending)
+      
+  return (step_maze,the_path)
 
 
-def main(a, start, ending, timing):
-    m, the_path = bfs_process(a,start,ending,timing)
+def main(maze, start, ending, timing):
+    step_maze, the_path = bfs_process(maze,start,ending,timing)
+    
     if not timing:
-      print(m)
+      print(step_maze)
       print(the_path)
-
-
-
-      images[0].save('bfs_images/bfs_maze.gif',
-               save_all=True, append_images=images[1:],
+      gif_list[0].save('bfs_images/bfs_maze.gif',
+               save_all=True, append_images=gif_list[1:],
                optimize=False, duration=1, loop=0)
 
